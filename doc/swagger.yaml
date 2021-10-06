@@ -1,0 +1,295 @@
+openapi: "3.0.3"
+info:
+  description: "This is openapi documentation for course Advanced studies of software development - Building cloud integration"
+  version: "1.0.0"
+  title: "Advanced studies of software development"
+  contact:
+    email: "t5vahe01@students.oamk.fi"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "item"
+  description: "Endpoints for item management"
+- name: "search"
+  description: "Endpoints for searching items"
+- name: "user"
+  description: "Endpoints for user operations"
+paths:
+  /item:
+    post:
+      tags:
+      - "item"
+      summary: "Add a new item"
+      description: "Adds new item to be sold"
+      operationId: "addItem"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddItem'
+      responses:
+        "200":
+          description: "Item added succesfully"
+        "400":
+          description: "Invalid input or required field's are missing"
+        "401":
+          description: "Token is invalid on missing"
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - "item"
+      summary: "Edit an existing item"
+      description: ""
+      operationId: "editItem"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditItem'
+      responses:
+        "200":
+          description: "Item updated succesfully" 
+        "400":
+          description: "Invalid input or required field's are missing"
+        "401":
+          description: "Token is invalid on missing"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - "item"
+      summary: "Delete an existing item"
+      description: "Deletes existing item"
+      operationId: "deleteItem"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteItem'
+      responses:
+        "200":
+          description: "Item deleted succesfully"
+        "400":
+          description: "Invalid input or required field's are missing"
+        "401":
+          description: "Token is invalid on missing"
+      security:
+      - bearerAuth: []
+  /search/date:
+    get:
+      tags:
+      - "search"
+      summary: "Find items by date they were added"
+      description: ""
+      operationId: "findItemsByDate"
+      parameters:
+      - name: "startDate"
+        in: "query"
+        description: "Date from"
+        schema:
+          type: "string"
+          example: "01.01.2000"
+      - name: "endDate"
+        in: "query"
+        description: "Date to"
+        schema:
+          type: "string"
+          example: "01.01.2001"
+      responses:
+        "200":
+          description: "Query was succesful"
+        "400":
+          description: "Invalid date value"
+  /search/category/{category}:
+    get:
+      tags:
+      - "search"
+      summary: "Find items by category"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findItemsByCategory"
+      parameters:
+      - name: "category"
+        in: "path"
+        description: "Category where to find items"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid status value"
+  /search/location/{location}:
+    get:
+      tags:
+      - "search"
+      summary: "Find pet by ID"
+      description: "Returns a single pet"
+      operationId: "getPetById"
+      parameters:
+      - name: "location"
+        in: "path"
+        description: "Location where to find items"
+        required: true
+        schema:
+          type: "string"
+          example: "finland"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Register new user"
+      operationId: "createUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        200:
+          description: "User created succesfully"
+        401:
+          description: "Username or password is missing"
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid username/password supplied"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AddUser:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        username:
+          type: "string"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        phone:
+          type: "string"
+        userStatus:
+          type: "integer"
+          format: "int32"
+          description: "User Status"
+    LoginUser:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+        password:
+          type: "string"
+        phone:
+          type: "string"
+    AddItem:
+      type: "object"
+      required:
+      - "title"
+      - "description"
+      - "location"
+      - "category"
+      - "deliveryType"
+      - "price"
+      properties:
+        title:
+          type: "string"
+          example: "Example item"
+        description:
+          type: "string"
+          example: "Describe the item"
+        category:
+          type: "string"
+          example: "cars"
+        location:
+          type: "string"
+          example: "finland"
+        deliveryType:
+          type: "integer"
+          enum: [1,2]
+    EditItem:
+      type: "object"
+      required:
+      - "title"
+      - "description"
+      - "location"
+      - "category"
+      - "deliveryType"
+      - "price"
+      properties:
+        title:
+          type: "string"
+          example: "Example item"
+        description:
+          type: "string"
+          example: "Describe the item"
+        category:
+          type: "string"
+          example: "cars"
+        location:
+          type: "string"
+          example: "finland"
+        deliveryType:
+          type: "integer"
+          enum: [1,2]
+    DeleteItem:
+      type: "object"
+      required:
+      - "title"
+      - "description"
+      - "location"
+      - "category"
+      - "deliveryType"
+      - "price"
+      properties:
+        title:
+          type: "string"
+          example: "Example item"
+        description:
+          type: "string"
+          example: "Describe the item"
+        category:
+          type: "string"
+          example: "cars"
+        location:
+          type: "string"
+          example: "finland"
+        deliveryType:
+          type: "integer"
+          enum: [1,2]
