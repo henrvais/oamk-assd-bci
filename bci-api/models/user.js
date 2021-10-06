@@ -3,10 +3,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-    async create(firstname, lastname, username, password){
+    async create(firstname, lastname, username, password, phone){
         data = {
-            'status': 400,
-            'user': {}
+            'status': 400
         }
         try {
             const conn = await pool.getConnection();
@@ -17,14 +16,15 @@ module.exports = {
             );
             if(userExists[0] == null){
                 encryptedPassword = await bcrypt.hash(password, 10);
-                sqlInsert = "INSERT INTO `users`(`firstname`,`lastname`,`username`,`secret`) VALUES (?,?,?,?)";
+                sqlInsert = "INSERT INTO `users`(`firstname`,`lastname`,`username`,`secret`,`phone`) VALUES (?,?,?,?,?)";
                 const insertQuery = await conn.query(
                     sqlInsert,
                     [
                         firstname,
                         lastname,
                         username.toLowerCase(),
-                        encryptedPassword
+                        encryptedPassword,
+                        phone
                     ]
                 );
                 if("insertId" in insertQuery){
@@ -44,13 +44,11 @@ module.exports = {
                             parseInt(insertQuery.insertId)
                         ]
                     )
-                    data.user.id = insertQuery.insertId;
-                    data.user.firstname = firstname;
-                    data.user.lastname = lastname;
-                    data.user.username = username.toLowerCase();
-                    data.user.token = token;
+                    data.token = token;
                 }
                 data.status = 200;
+            } else {
+                data.status = 401;
             }
             conn.end();
         } catch(err) {
