@@ -134,6 +134,30 @@
         ]
       }
     },
+    "/search": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "List all items",
+        "operationId": "listItems",
+        "responses": {
+          "200": {
+            "description": "Query was succesful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResults"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameter"
+          }
+        }
+      }
+    },
     "/search/date": {
       "get": {
         "tags": [
@@ -164,7 +188,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Query was succesful"
+            "description": "Query was succesful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResults"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid search parameter"
@@ -193,7 +224,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Query was succesful"
+            "description": "Query was succesful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResults"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid search parameter"
@@ -223,7 +261,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Query was succesful"
+            "description": "Query was succesful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResults"
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid search parameter"
@@ -406,6 +451,10 @@
               1,
               2
             ]
+          },
+          "price": {
+            "type": "number",
+            "example": "19.90"
           }
         }
       },
@@ -420,6 +469,10 @@
           "price"
         ],
         "properties": {
+          "itemId": {
+            "type": "integer",
+            "example": "2"
+          },
           "title": {
             "type": "string",
             "example": "Example item"
@@ -442,42 +495,72 @@
               1,
               2
             ]
+          },
+          "price": {
+            "type": "number",
+            "example": "19.90"
           }
         }
       },
       "DeleteItem": {
         "type": "object",
         "required": [
-          "title",
-          "description",
-          "location",
-          "category",
-          "deliveryType",
-          "price"
+          "itemId"
         ],
         "properties": {
-          "title": {
-            "type": "string",
-            "example": "Example item"
+          "itemId": {
+            "type": "integer",
+            "example": "2"
+          }
+        }
+      },
+      "SearchResults": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SearchResult"
+        }
+      },
+      "SearchResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
           },
-          "description": {
-            "type": "string",
-            "example": "Describe the item"
+          "userId": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string"
           },
           "category": {
-            "type": "string",
-            "example": "cars"
+            "type": "string"
           },
           "location": {
-            "type": "string",
-            "example": "finland"
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
           },
           "deliveryType": {
-            "type": "integer",
-            "enum": [
-              1,
-              2
-            ]
+            "type": "integer"
+          },
+          "price": {
+            "type": "number"
+          },
+          "firstname\"": {
+            "type": "string"
+          },
+          "lastname\"": {
+            "type": "string"
+          },
+          "phone\"": {
+            "type": "string"
+          },
+          "username\"": {
+            "type": "string"
           }
         }
       }

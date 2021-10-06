@@ -84,7 +84,6 @@ module.exports = {
                 skipAnd = false;
             }
         }
-        console.log(conditions);
         if(conditions !== ""){
             sql = "UPDATE `items` SET " + conditions + " WHERE `userId`=? AND `id`=?"
             try {
@@ -110,16 +109,33 @@ module.exports = {
         return data;
     },
 
+    async listAll(){
+        data = {
+            'status': 400,
+            'list': null
+        }
+        try {
+            const conn = await pool.getConnection();
+            listItems = await conn.query(
+                "SELECT `items`.*, `users`.firstname, users.lastname, users.phone, users.username FROM `items` LEFT JOIN `users` ON items.userId = users.id"
+            )
+            data.status = 200
+            data.list = listItems;
+        } catch (err){
+            throw err;
+        }
+        return data;
+    },
+
     async listByCategory(category){
         data = {
             "status": 400,
-            "message": "Unknown error",
             "list": null
         }
         try {
             const conn = await pool.getConnection();
             listItems = await conn.query(
-                "SELECT `items`.*, `users`.* FROM `items` WHERE `category`=? LEFT JOIN `users` ON items.userId = users.id",
+                "SELECT `items`.*, `users`.firstname, users.lastname, users.phone, users.username FROM `items` LEFT JOIN `users` ON items.userId = users.id WHERE `category`=?",
                 category
             )
             data.status = 200
@@ -133,14 +149,13 @@ module.exports = {
     async listByLocation(location){
         data = {
             "status": 400,
-            "message": "Unknown error",
             "list": null
         }
         try {
             const conn = await pool.getConnection();
             listItems = await conn.query(
-                "SELECT * FROM `items` WHERE `location`=?",
-                category
+                "SELECT `items`.*, `users`.firstname, users.lastname, users.phone, users.username FROM `items` LEFT JOIN `users` ON items.userId = users.id WHERE `location`=?",
+                location
             )
             data.status = 200
             data.list = listItems;
@@ -153,7 +168,6 @@ module.exports = {
     async listByDate(values){
         data = {
             "status": 404,
-            "message": "Unknown error",
             "list": null
         }
         condition = "";
@@ -167,7 +181,8 @@ module.exports = {
             }
         }
         if(condition !== ""){
-            sql = "SELECT `items`.*, `users`.firstname, users.lastname FROM `items` LEFT JOIN `users` ON items.userId = users.id WHERE" + condition;
+            sql = "SELECT `items`.*, `users`.firstname, users.lastname, users.phone, users.username FROM `items` LEFT JOIN `users` ON items.userId = users.id WHERE" + condition;
+            console.log(sql)
             try {
                 const conn = await pool.getConnection();
                 listItems = await conn.query(

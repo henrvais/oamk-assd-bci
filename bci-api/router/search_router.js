@@ -5,22 +5,33 @@ const { route } = require('./item_router.js');
 
 
 router.get("/", async(req, res) => {
-
+    listData = await Item.listAll();
+    if(listData.status == 200){
+        res.status(200).send(listData.list);
+    } else {
+        res.sendStatus(listData.status);
+    }
 });
 
 router.get("/date", async (req, res) => {
     values = {}
     if(req.query.startDate){
-        values.startDate = req.query.startDate;
+        start = new Date(req.query.startDate).toISOString().substr(0,10);
+        values.startDate = start;
     }
     if(req.query.endDate){
-        values.endDate = req.query.endDate;
+        end = new Date(req.query.endDate).toISOString().substr(0,10);
+        values.endDate = end;
     }
-    listData = await Item.listByDate(values);
-    if(listData.status == 200){
-        res.status(200).send(listData.list);
+    if(Object.keys(values).length === 0){
+        res.sendStatus(400);
     } else {
-        res.status(listData.status).send(listData.message);
+        listData = await Item.listByDate(values);
+        if(listData.status == 200){
+            res.status(200).send(listData.list);
+        } else {
+            res.status(listData.status).send(listData.message);
+        }
     }
 });
 

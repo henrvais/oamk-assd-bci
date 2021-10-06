@@ -80,6 +80,21 @@ paths:
           description: "Token is invalid on missing"
       security:
       - bearerAuth: []
+  /search:
+    get:
+      tags:
+      - "search"
+      summary: "List all items"
+      operationId: "listItems"
+      responses:
+        "200":
+          description: "Query was succesful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+        "400":
+          description: "Invalid search parameter"
   /search/date:
     get:
       tags:
@@ -103,6 +118,10 @@ paths:
       responses:
         "200":
           description: "Query was succesful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
         "400":
           description: "Invalid search parameter"
   /search/category/{category}:
@@ -122,6 +141,10 @@ paths:
       responses:
         "200":
           description: "Query was succesful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
         "400":
           description: "Invalid search parameter"
   /search/location/{location}:
@@ -142,6 +165,10 @@ paths:
       responses:
         "200":
           description: "Query was succesful"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
         "400":
           description: "Invalid search parameter"
   /user:
@@ -265,6 +292,9 @@ components:
         deliveryType:
           type: "integer"
           enum: [1,2]
+        price:
+          type: "number"
+          example: "19.90"
     EditItem:
       type: "object"
       required:
@@ -275,6 +305,9 @@ components:
       - "deliveryType"
       - "price"
       properties:
+        itemId:
+          type: "integer"
+          example: "2"
         title:
           type: "string"
           example: "Example item"
@@ -290,28 +323,47 @@ components:
         deliveryType:
           type: "integer"
           enum: [1,2]
+        price:
+          type: "number"
+          example: "19.90"
     DeleteItem:
       type: "object"
       required:
-      - "title"
-      - "description"
-      - "location"
-      - "category"
-      - "deliveryType"
-      - "price"
+      - "itemId"
       properties:
-        title:
+        itemId:
+          type: "integer"
+          example: "2"
+    SearchResults:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/SearchResult'
+    SearchResult:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        userId:
+          type: "integer"
+        timestamp:
           type: "string"
-          example: "Example item"
-        description:
-          type: "string"
-          example: "Describe the item"
         category:
           type: "string"
-          example: "cars"
         location:
           type: "string"
-          example: "finland"
+        title:
+          type: "string"
+        description:
+          type: "string"
         deliveryType:
           type: "integer"
-          enum: [1,2]
+        price:
+          type: "number"
+        firstname":
+          type: "string"
+        lastname":
+          type: "string"
+        phone":
+          type: "string"
+        username":
+          type: "string"
