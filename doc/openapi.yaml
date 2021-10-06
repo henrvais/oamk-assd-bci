@@ -10,7 +10,6 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 servers:
-  - url: https://api.avaruus.ninja
   - url: http://api.avaruus.ninja
 tags:
 - name: "item"
