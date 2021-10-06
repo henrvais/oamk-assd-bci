@@ -17,7 +17,7 @@ app.use('/item', item_router);
 app.use('/search', search_router);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`BCI app listening at http://localhost:${port}`)
 })
 
 module.exports = app;

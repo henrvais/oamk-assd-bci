@@ -10,7 +10,6 @@ router.post('/', async function(req, res){
    const username = req.body.username;
    const password = req.body.password;
    const phone = req.body.phone;
-   console.log(req.body);
    if(
       !(firstname && lastname && username && password && phone) || 
       firstname.length > 32 || lastname.length > 32 || username.length > 32 ||

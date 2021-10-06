@@ -76,7 +76,6 @@ router.delete('/', auth, async (req, res) => {
         req.user.userId,
         itemId
     )
-    console.log(itemData);
     if(itemData.status == 200){
         res.status(200).send(
             {

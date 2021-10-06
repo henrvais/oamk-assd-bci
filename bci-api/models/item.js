@@ -45,7 +45,6 @@ module.exports = {
                     itemId
                 ]
             )
-            console.log(deleteItem);
             if(deleteItem.affectedRows == 1){
                 data.status = 200;
                 data.message = "Item " + itemId.toString() + " deleted";
@@ -74,8 +73,6 @@ module.exports = {
         conditions = "";
         skipAnd = true;
         for (const [key, value] of Object.entries(values)) {
-            console.log(key);
-            console.log(value);
             if(allowed.includes(key)){
                 if(skipAnd == false){
                     conditions += ",";
@@ -182,7 +179,6 @@ module.exports = {
         }
         if(condition !== ""){
             sql = "SELECT `items`.*, `users`.firstname, users.lastname, users.phone, users.username FROM `items` LEFT JOIN `users` ON items.userId = users.id WHERE" + condition;
-            console.log(sql)
             try {
                 const conn = await pool.getConnection();
                 listItems = await conn.query(
