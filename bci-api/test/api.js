@@ -25,8 +25,8 @@ describe('Test REST endpoints', () =>{
                 .send(
                     {
                         firstname: firstname,
-                        lastname: lastname,
-                        username: username,
+                        lastName: lastname,
+                        userName: username,
                         password: password,
                         phone: phone
                     }

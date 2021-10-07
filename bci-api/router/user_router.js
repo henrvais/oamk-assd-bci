@@ -5,8 +5,8 @@ const User = require('../models/user.js')
 // Create user, return jwt
 router.post('/', async function(req, res){
    res.setHeader('Content-Type', 'application/json');
-   const firstname = req.body.firstname;
-   const lastname = req.body.lastname;
+   const firstname = req.body.firstName;
+   const lastname = req.body.lastName;
    const username = req.body.username;
    const password = req.body.password;
    const phone = req.body.phone;
