@@ -371,10 +371,6 @@
             "type": "string",
             "maxLength": 32
           },
-          "email": {
-            "type": "string",
-            "maxLength": 64
-          },
           "password": {
             "type": "string",
             "maxLength": 64
