@@ -363,11 +363,11 @@
             "type": "string",
             "maxLength": 32
           },
-          "firstName": {
+          "firstname": {
             "type": "string",
             "maxLength": 32
           },
-          "lastName": {
+          "lastname": {
             "type": "string",
             "maxLength": 32
           },
